@@ -1,0 +1,5 @@
+export { type Product } from './Product'
+export { type SaleItem } from './SaleItem'
+export { type NavItem } from './NavItem'
+export { type Transaction } from './Transaction'
+export { type Customer } from './Customer'
