@@ -1,0 +1,41 @@
+-
+  request:
+    url: /api/products
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      [
+        { "id": 1, "name": "Vestido Midi Floral", "category": "Vestidos", "price": 289.90, "oldPrice": 389.90, "description": "Vestido midi com estampa floral exclusiva, tecido fluido 100% viscose.", "tags": ["Floral", "Midi", "Viscose", "Verão"], "image": "/img/products/vestido-midi.jpg" },
+        { "id": 2, "name": "Blusa Linho Off-White", "category": "Blusas", "price": 159.00, "oldPrice": null, "description": "Blusa ampla em linho natural, corte oversized com acabamento premium.", "tags": ["Linho", "Oversized", "Básico"], "image": "/img/products/blusa-linho.jpg" },
+        { "id": 3, "name": "Calça Wide Leg Alfaiataria", "category": "Calças", "price": 349.90, "oldPrice": null, "description": "Calça wide leg em tecido de alfaiataria com caimento impecável.", "tags": ["Alfaiataria", "Wide Leg", "Cintura Alta"], "image": "/img/products/calca-wide.jpg" },
+        { "id": 4, "name": "Vestido Slip Dress Cetim", "category": "Vestidos", "price": 219.00, "oldPrice": 279.00, "description": "Slip dress em cetim acetinado, estilo minimalista.", "tags": ["Cetim", "Minimalista", "Slip Dress"], "image": "/img/products/slip-dress.jpg" },
+        { "id": 5, "name": "Bolsa Tote Canvas", "category": "Acessórios", "price": 189.00, "oldPrice": null, "description": "Bolsa tote em canvas resistente com detalhes em couro vegano.", "tags": ["Canvas", "Couro Vegano", "Tote"], "image": "/img/products/bolsa-tote.jpg" },
+        { "id": 6, "name": "Blusa Cropped Tricô", "category": "Blusas", "price": 199.90, "oldPrice": null, "description": "Blusa cropped em tricô canelado com manga longa.", "tags": ["Tricô", "Cropped", "Inverno"], "image": "/img/products/blusa-cropped.jpg" },
+        { "id": 7, "name": "Calça Jeans Reta", "category": "Calças", "price": 259.00, "oldPrice": 320.00, "description": "Calça jeans corte reto, lavagem clara clássica.", "tags": ["Jeans", "Reta", "Clássico"], "image": "/img/products/calca-jeans.jpg" },
+        { "id": 8, "name": "Colar Dourado Minimalista", "category": "Acessórios", "price": 89.90, "oldPrice": null, "description": "Colar delicado banhado a ouro 18k com pingente geométrico.", "tags": ["Dourado", "Minimalista", "Banhado"], "image": "/img/products/colar-dourado.jpg" }
+      ]
+
+-
+  request:
+    url: /api/products/categories
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      ["Vestidos", "Blusas", "Calças", "Acessórios"]
+
+-
+  request:
+    url: /api/products
+    method: POST
+  response:
+    status: 201
+    headers:
+      content-type: application/json
+    body: >
+      { "id": 99, "name": "Novo Produto", "category": "Blusas", "price": 100.00, "oldPrice": null, "description": "Produto criado via mock", "tags": ["Novo"], "image": "/img/products/default.jpg" }

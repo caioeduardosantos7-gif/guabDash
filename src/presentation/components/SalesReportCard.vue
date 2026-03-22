@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { dashboardService } from '../../application/container'
+import { StringUtils } from '../../shared/StringUtils'
+import type { SalesReport } from '../../domain/models'
 
 const { t } = useI18n()
 
@@ -9,6 +12,17 @@ const activeTime = ref('7d')
 
 const monthKeys = ['months.jan', 'months.feb', 'months.mar', 'months.apr', 'months.may', 'months.jun', 'months.jul', 'months.aug', 'months.sep', 'months.oct', 'months.nov', 'months.dec']
 const activeMonth = ref('months.aug')
+
+const report = ref<SalesReport | null>(null)
+
+const { formatBRL } = StringUtils
+
+async function fetchReport() {
+  report.value = await dashboardService.getSalesReport(activeTime.value, activeMonth.value)
+}
+
+onMounted(fetchReport)
+watch([activeTime, activeMonth], fetchReport)
 </script>
 
 <template>
@@ -31,8 +45,11 @@ const activeMonth = ref('months.aug')
       </div>
     </div>
 
-    <div class="text-[34px] font-bold tracking-tighter text-gray-900 dark:text-gray-100 mb-1">R$ 22.178,50</div>
-    <div class="text-xs text-emerald-500 font-semibold">⬆ R$ 11.650,00 (+2,5%)</div>
+    <div class="text-[34px] font-bold tracking-tighter text-gray-900 dark:text-gray-100 mb-1">R$ {{ report ? formatBRL(report.totalSales) : '—' }}</div>
+    <div class="text-xs font-semibold" :class="report && report.deltaPercent >= 0 ? 'text-emerald-500' : 'text-red-500'">
+      <template v-if="report">⬆ R$ {{ formatBRL(report.deltaSales) }} (+{{ report.deltaPercent }}%)</template>
+      <template v-else>—</template>
+    </div>
 
     <!-- Chart -->
     <div class="relative h-[120px] my-4">
@@ -55,16 +72,16 @@ const activeMonth = ref('months.aug')
       </svg>
       <!-- Tooltip -->
       <div class="absolute top-2 left-[62%] min-w-[148px] bg-gray-900 dark:bg-[#2a2d3e] dark:border dark:border-[#3a3a3a] text-white rounded-[10px] px-3.5 py-2.5 text-xs pointer-events-none shadow-md hidden md:block">
-        <div class="text-[11px] opacity-60 mb-1.5">14 Ago 2023</div>
+        <div class="text-[11px] opacity-60 mb-1.5">—</div>
         <div class="flex items-center gap-1.5 mb-[3px]">
           <div class="w-2 h-2 rounded-full bg-indigo-500 shrink-0"></div>
-          <span class="opacity-70 flex-1">Transações</span>
-          <span class="font-semibold">222</span>
+          <span class="opacity-70 flex-1">{{ t('dashboard.transactions') }}</span>
+          <span class="font-semibold">—</span>
         </div>
         <div class="flex items-center gap-1.5">
           <div class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></div>
-          <span class="opacity-70 flex-1">Produtos</span>
-          <span class="font-semibold">44</span>
+          <span class="opacity-70 flex-1">{{ t('dashboard.products') }}</span>
+          <span class="font-semibold">—</span>
         </div>
       </div>
     </div>

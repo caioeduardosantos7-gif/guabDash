@@ -143,16 +143,69 @@
         class="w-full sm:w-auto px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-[14px] font-bold rounded-lg shadow-sm hover:-translate-y-px hover:shadow transition-all cursor-pointer" 
         @click="submit"
       >
-        {{ t('salesPanel.registerSale') }}
+        {{ t('salesPanel.confirmSale') }}
       </button>
     </div>
   </div>
+
+  <!-- Success Modal -->
+  <Teleport to="body">
+    <Transition name="modal">
+      <div
+        v-if="showSuccessModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        @click.self="closeModal"
+      >
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="closeModal" />
+
+        <!-- Card -->
+        <div class="relative bg-white dark:bg-[#1e1e1e] border border-gray-200 dark:border-[#3a3a3a] rounded-2xl shadow-2xl w-full max-w-sm p-8 flex flex-col items-center text-center gap-4 z-10">
+          <!-- Icon -->
+          <div class="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center mb-1">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+
+          <!-- Text -->
+          <div>
+            <h3 class="text-[18px] font-bold text-gray-900 dark:text-gray-100 mb-1">{{ t('salesPanel.saleSuccessTitle') }}</h3>
+            <p class="text-[13px] text-gray-500 dark:text-gray-400">{{ t('salesPanel.saleSuccessMessage') }}</p>
+          </div>
+
+          <!-- Total -->
+          <div class="w-full bg-gray-50 dark:bg-[#272727] border border-gray-200 dark:border-[#3a3a3a] rounded-xl px-5 py-3">
+            <span class="text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">{{ t('salesPanel.saleTotal') }}</span>
+            <div class="text-[24px] font-bold text-gray-900 dark:text-gray-100 mt-[-2px]">R$ {{ formatCurrency(completedTotal) }}</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-3 w-full mt-1">
+            <button
+              class="flex-1 px-4 py-2.5 border border-gray-200 dark:border-[#3a3a3a] bg-gray-50 hover:bg-gray-100 dark:bg-[#272727] dark:hover:bg-[#333] text-gray-700 dark:text-gray-200 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer"
+              @click="router.push({ name: 'dashboard' })"
+            >
+              {{ t('salesPanel.viewTransactions') }}
+            </button>
+            <button
+              class="flex-1 px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-[13px] font-bold rounded-lg shadow-sm transition-colors cursor-pointer"
+              @click="closeModal"
+            >
+              {{ t('salesPanel.newSale') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { StringUtils } from '../../shared/StringUtils'
 import { useProductStore } from '../../domain/useProductStore'
 import type { Product } from '../../domain/models'
 import type { SaleItem } from '../../domain/models'
@@ -160,7 +213,9 @@ import BackButton from './BackButton.vue'
 
 const { t } = useI18n()
 const router = useRouter()
-const { products: registeredProducts } = useProductStore()
+const { products: registeredProducts, loadProducts } = useProductStore()
+
+onMounted(() => loadProducts())
 
 const activeDropdown = ref<number | null>(null)
 
@@ -208,11 +263,13 @@ function reset() {
 
 const total = computed(() => items.reduce((s, it) => s + (Number(it.quantity) * Number(it.price || 0)), 0))
 
-function formatCurrency(v: number) {
-  return v.toFixed(2).replace('.', ',')
-}
+const { formatCurrency } = StringUtils
+
+const showSuccessModal = ref(false)
+const completedTotal = ref(0)
 
 function submit() {
+  completedTotal.value = total.value
   const payload = { 
     items: items.map(i => ({ 
       product: i.product, 
@@ -223,5 +280,32 @@ function submit() {
     total: total.value 
   }
   console.log('Registrar venda', payload)
+  showSuccessModal.value = true
+}
+
+function closeModal() {
+  showSuccessModal.value = false
+  reset()
 }
 </script>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+.modal-enter-active .relative,
+.modal-enter-active > div:last-child,
+.modal-leave-active > div:last-child {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.modal-enter-from > div:last-child,
+.modal-leave-to > div:last-child {
+  transform: scale(0.95);
+  opacity: 0;
+}
+</style>

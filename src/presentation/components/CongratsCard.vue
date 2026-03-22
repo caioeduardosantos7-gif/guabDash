@@ -1,33 +1,39 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { dashboardService } from '../../application/container'
+import type { BestsellerProduct } from '../../domain/models'
 
 const { t } = useI18n()
 
-const products = [
-  { nameKey: 'Camiseta Arco-íris Branca', sold: 271, emoji: '👕' },
-  { nameKey: 'Calça Cropped', sold: 185, emoji: '👖' },
-  { nameKey: 'Boné Preto Huzzle', sold: 143, emoji: '🧢' },
-]
+const products = ref<BestsellerProduct[]>([])
 
+onMounted(async () => {
+  products.value = await dashboardService.getBestsellers()
+})
+
+const isEmpty = computed(() => products.value.length === 0)
 const productIdx = ref(0)
-const currentProduct = computed(() => products[productIdx.value])
+const currentProduct = computed(() => products.value[productIdx.value])
 const visibleProducts = computed(() => {
+  if (isEmpty.value) return []
   const i = productIdx.value
-  const len = products.length
+  const len = products.value.length
   return [
-    products[(i + len - 1) % len],
-    products[i],
-    products[(i + 1) % len],
+    products.value[(i + len - 1) % len],
+    products.value[i],
+    products.value[(i + 1) % len],
   ]
 })
 
 function nextProduct() {
-  productIdx.value = (productIdx.value + 1) % products.length
+  if (isEmpty.value) return
+  productIdx.value = (productIdx.value + 1) % products.value.length
 }
 
 function prevProduct() {
-  productIdx.value = (productIdx.value + products.length - 1) % products.length
+  if (isEmpty.value) return
+  productIdx.value = (productIdx.value + products.value.length - 1) % products.value.length
 }
 </script>
 
@@ -41,8 +47,14 @@ function prevProduct() {
     </div>
 
     <div class="flex-1 flex flex-col items-center gap-2.5">
+      <!-- Empty state -->
+      <div v-if="isEmpty" class="flex-1 flex flex-col items-center justify-center gap-2 text-center py-4">
+        <div class="text-3xl">📦</div>
+        <p class="text-xs text-gray-400 dark:text-gray-500">{{ t('dashboard.noBestsellers') }}</p>
+      </div>
+
       <!-- Product Images -->
-      <div class="flex gap-3 justify-center">
+      <div v-if="!isEmpty" class="flex gap-3 justify-center">
         <div
           v-for="(p, i) in visibleProducts"
           :key="i"
@@ -56,7 +68,7 @@ function prevProduct() {
       </div>
 
       <!-- Carousel Nav -->
-      <div class="flex items-center gap-2.5 mt-1">
+      <div v-if="!isEmpty" class="flex items-center gap-2.5 mt-1">
         <div
           class="w-7 h-7 rounded-full bg-gray-100 dark:bg-[#272727] border border-gray-200 dark:border-[#3a3a3a] grid place-items-center cursor-pointer text-gray-500 dark:text-gray-400 hover:bg-indigo-500 hover:border-indigo-500 hover:text-white transition-all duration-150"
           @click="prevProduct"
@@ -75,10 +87,10 @@ function prevProduct() {
         </div>
       </div>
 
-      <div class="text-sm font-bold text-center text-gray-900 dark:text-gray-100">
-        {{ currentProduct.nameKey }}
+      <div v-if="!isEmpty" class="text-sm font-bold text-center text-gray-900 dark:text-gray-100">
+        {{ currentProduct.name }}
       </div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 text-center">
+      <div v-if="!isEmpty" class="text-xs text-gray-500 dark:text-gray-400 text-center">
         {{ currentProduct.sold }} {{ t('dashboard.sold') }}
       </div>
     </div>

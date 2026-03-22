@@ -1,0 +1,24 @@
+-
+  request:
+    url: /api/sales
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      [
+        { "id": 1, "customerId": 1, "items": [{ "id": 1, "product": "Vestido Midi Floral", "quantity": 1, "price": 289.90, "method": "pix" }], "total": 289.90, "createdAt": "2026-03-22T10:30:00Z" },
+        { "id": 2, "customerId": 2, "items": [{ "id": 2, "product": "Blusa Linho Off-White", "quantity": 2, "price": 159.00, "method": "card" }], "total": 318.00, "createdAt": "2026-03-21T14:15:00Z" }
+      ]
+
+-
+  request:
+    url: /api/sales
+    method: POST
+  response:
+    status: 201
+    headers:
+      content-type: application/json
+    body: >
+      { "id": 99, "customerId": null, "items": [], "total": 0, "createdAt": "2026-03-22T12:00:00Z" }

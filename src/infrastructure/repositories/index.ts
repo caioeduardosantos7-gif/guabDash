@@ -1,0 +1,5 @@
+export { ProductRepositoryHttp } from './ProductRepositoryHttp'
+export { CustomerRepositoryHttp } from './CustomerRepositoryHttp'
+export { TransactionRepositoryHttp } from './TransactionRepositoryHttp'
+export { DashboardRepositoryHttp } from './DashboardRepositoryHttp'
+export { SaleRepositoryHttp } from './SaleRepositoryHttp'

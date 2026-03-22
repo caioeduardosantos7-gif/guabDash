@@ -1,0 +1,27 @@
+-
+  request:
+    url: /api/customers
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      [
+        { "id": 1, "name": "Maria da Silva", "personType": "fisica", "document": "123.456.789-00", "phone": "(11) 99999-0001", "email": "maria@email.com" },
+        { "id": 2, "name": "João Oliveira", "personType": "fisica", "document": "987.654.321-00", "phone": "(21) 98888-0002", "email": "joao@email.com" },
+        { "id": 3, "name": "Loja Central LTDA", "personType": "juridica", "document": "12.345.678/0001-90", "phone": "(31) 3333-4444", "email": "contato@lojacentral.com" },
+        { "id": 4, "name": "Ana Costa", "personType": "fisica", "document": "111.222.333-44", "phone": "(41) 97777-5555", "email": "ana.costa@email.com" },
+        { "id": 5, "name": "Pedro Santos", "personType": "fisica", "document": "555.666.777-88", "phone": "(51) 96666-7777", "email": "pedro.santos@email.com" }
+      ]
+
+-
+  request:
+    url: /api/customers
+    method: POST
+  response:
+    status: 201
+    headers:
+      content-type: application/json
+    body: >
+      { "id": 99, "name": "Novo Cliente", "personType": "fisica", "document": "000.000.000-00", "phone": "(00) 00000-0000", "email": "novo@email.com" }

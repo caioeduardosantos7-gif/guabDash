@@ -39,10 +39,16 @@
     "item": "Item",
     "date": "Date",
     "value": "Value",
-    "platform": "Platform",
+    "status": "Status",
+    "statusCompleted": "Completed",
+    "statusCancelled": "Cancelled",
     "congratsTitle": "Congratulations! 🎉",
     "congratsSub": "Some products already have the highest purchase volumes",
-    "sold": "sold"
+    "sold": "sold",
+    "noTransactions": "No transactions found.",
+    "noBestsellers": "No featured products yet.",
+    "transactions": "Transactions",
+    "products": "Products"
   },
   "months": {
     "jan": "Jan",
@@ -85,6 +91,7 @@
   },
   "salesPanel": {
     "registerSale": "Register Sale",
+    "confirmSale": "Complete Sale",
     "newCustomer": "New customer",
     "product": "Product",
     "quantity": "Quantity",
@@ -99,7 +106,12 @@
     "addItem": "Add item",
     "clear": "Clear",
     "total": "Total",
-    "register": "Register Sale"
+    "register": "Register Sale",
+    "saleSuccessTitle": "Sale completed!",
+    "saleSuccessMessage": "The sale was successfully registered.",
+    "saleTotal": "Total amount",
+    "newSale": "New Sale",
+    "viewTransactions": "View Transactions"
   },
   "products": {
     "title": "Products",

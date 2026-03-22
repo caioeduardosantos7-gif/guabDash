@@ -1,0 +1,16 @@
+-
+  request:
+    url: /api/transactions
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      [
+        { "id": "CTG0291", "item": "Vestido Midi Floral", "date": "22/03/2026", "price": "R$289", "status": "completed", "selected": false },
+        { "id": "CTG0292", "item": "Blusa Linho Off-White", "date": "21/03/2026", "price": "R$159", "status": "cancelled", "selected": false },
+        { "id": "CTG0293", "item": "Calça Wide Leg Alfaiataria", "date": "20/03/2026", "price": "R$349", "status": "completed", "selected": false },
+        { "id": "CTG0294", "item": "Bolsa Tote Canvas", "date": "20/03/2026", "price": "R$189", "status": "completed", "selected": false },
+        { "id": "CTG0295", "item": "Colar Dourado Minimalista", "date": "19/03/2026", "price": "R$89", "status": "cancelled", "selected": false }
+      ]

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { customerService } from '../../application/container'
 import type { Customer } from '../../domain/models'
 import CustomerModal from '../components/CustomerModal.vue'
 import BackButton from '../components/BackButton.vue'
@@ -11,6 +12,11 @@ const customers = reactive<Customer[]>([])
 const showModal = ref(false)
 const editingCustomer = ref<Customer | null>(null)
 const search = ref('')
+
+onMounted(async () => {
+  const list = await customerService.list()
+  customers.splice(0, customers.length, ...list)
+})
 
 function openModal() {
   editingCustomer.value = null
@@ -27,12 +33,14 @@ function closeModal() {
   editingCustomer.value = null
 }
 
-function saveCustomer(data: Omit<Customer, 'id'>) {
+async function saveCustomer(data: Omit<Customer, 'id'>) {
   if (editingCustomer.value) {
+    const updated = await customerService.update(editingCustomer.value.id, data)
     const idx = customers.findIndex(c => c.id === editingCustomer.value!.id)
-    if (idx !== -1) customers[idx] = { id: editingCustomer.value.id, ...data }
+    if (idx !== -1) customers[idx] = updated
   } else {
-    customers.unshift({ id: Date.now(), ...data })
+    const created = await customerService.create(data)
+    customers.unshift(created)
   }
   closeModal()
 }

@@ -1,0 +1,15 @@
+{
+  "server": {
+    "port": 3456,
+    "host": "localhost"
+  },
+  "mappings": {
+    "requests": [
+      "mappings/products.yaml",
+      "mappings/customers.yaml",
+      "mappings/transactions.yaml",
+      "mappings/dashboard.yaml",
+      "mappings/sales.yaml"
+    ]
+  }
+}

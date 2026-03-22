@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { transactionService } from '../../application/container'
 import type { Transaction } from '../../domain/models'
 
 const { t } = useI18n()
 
 const search = ref('')
-const transactions = ref<Transaction[]>([
-  { id: 'CTG0291', item: 'Calça Cropped', date: '12/02/2022', price: 'R$599', platform: 'Shopee', selected: false },
-  { id: 'CTG0292', item: 'Camiseta Arco-íris', date: '12/02/2022', price: 'R$49', platform: 'Tokopedia', selected: true },
-  { id: 'CTG0293', item: 'Boné Preto Huzzle', date: '12/02/2022', price: 'R$109', platform: 'Tokopedia', selected: false },
-  { id: 'CTG0294', item: 'Calça Cropped', date: '12/02/2022', price: 'R$666', platform: 'Shopee', selected: false },
-  { id: 'CTG0295', item: 'Calça Cropped', date: '12/02/2022', price: 'R$239', platform: 'Tiktok', selected: false },
-])
+const transactions = ref<Transaction[]>([])
+
+onMounted(async () => {
+  transactions.value = await transactionService.list()
+})
 
 const filteredTx = computed(() =>
   transactions.value.filter(tx =>
@@ -21,10 +20,9 @@ const filteredTx = computed(() =>
   )
 )
 
-const platformClasses: Record<string, string> = {
-  shopee: 'bg-orange-50 text-orange-500 dark:bg-orange-950/30 dark:text-orange-400',
-  tokopedia: 'bg-emerald-50 text-emerald-500 dark:bg-emerald-950/30 dark:text-emerald-400',
-  tiktok: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+const statusClasses: Record<string, string> = {
+  completed: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400',
+  cancelled: 'bg-red-50 text-red-500 dark:bg-red-950/30 dark:text-red-400',
 }
 </script>
 
@@ -78,11 +76,16 @@ const platformClasses: Record<string, string> = {
             {{ t('dashboard.value') }}
           </th>
           <th class="px-3.5 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-[#272727] border-b border-gray-200 dark:border-[#3a3a3a]">
-            {{ t('dashboard.platform') }}
+            {{ t('dashboard.status') }}
           </th>
         </tr>
       </thead>
       <tbody>
+        <tr v-if="filteredTx.length === 0">
+          <td colspan="6" class="px-3.5 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+            {{ t('dashboard.noTransactions') }}
+          </td>
+        </tr>
         <tr
           v-for="tx in filteredTx"
           :key="tx.id + tx.item"
@@ -100,8 +103,8 @@ const platformClasses: Record<string, string> = {
           <td class="px-3.5 py-[11px] text-[13px]">
             <span
               class="inline-flex items-center gap-[5px] text-xs font-semibold px-[9px] py-[3px] rounded-md"
-              :class="platformClasses[tx.platform.toLowerCase()] ?? ''"
-            >{{ tx.platform }}</span>
+              :class="statusClasses[tx.status]"
+            >{{ t(`dashboard.status${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}`) }}</span>
           </td>
         </tr>
       </tbody>

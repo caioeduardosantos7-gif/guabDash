@@ -184,6 +184,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { StringUtils } from '../../shared/StringUtils'
 import type { Product } from '../../domain/models'
 
 const { t } = useI18n()
@@ -228,7 +229,5 @@ const filtered = computed(() => {
   return list
 })
 
-function formatCurrency(v: number) {
-  return v.toFixed(2).replace('.', ',')
-}
+const { formatCurrency } = StringUtils
 </script>

@@ -1,0 +1,55 @@
+-
+  request:
+    url: /api/dashboard/stats
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      {
+        "totalProducts":    { "labelKey": "dashboard.totalProducts",   "value": "250", "delta": "+2,5%", "up": true },
+        "completedOrders":  { "labelKey": "dashboard.completedOrders", "value": "124", "delta": "+2,5%", "up": true },
+        "cancelledOrders":  { "labelKey": "dashboard.cancelledOrders", "value": "14",  "delta": "-1,5%", "up": false },
+        "bestProducts":     { "labelKey": "dashboard.bestProducts",    "value": "119", "delta": "+2,5%", "up": true }
+      }
+
+-
+  request:
+    url: /api/dashboard/bestsellers
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      [
+        { "name": "Vestido Midi Floral", "sold": 271, "emoji": "👗" },
+        { "name": "Calça Wide Leg", "sold": 185, "emoji": "👖" },
+        { "name": "Bolsa Tote Canvas", "sold": 143, "emoji": "👜" }
+      ]
+
+-
+  request:
+    url: /api/dashboard/sales-report(.*)
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      {
+        "totalSales": 22178.50,
+        "deltaSales": 11650.00,
+        "deltaPercent": 2.5,
+        "transactionsSeries": [
+          { "x": 0, "y": 90 }, { "x": 100, "y": 85 }, { "x": 200, "y": 50 },
+          { "x": 300, "y": 40 }, { "x": 400, "y": 55 }, { "x": 500, "y": 30 },
+          { "x": 600, "y": 40 }, { "x": 700, "y": 20 }, { "x": 800, "y": 35 }
+        ],
+        "productsSeries": [
+          { "x": 0, "y": 95 }, { "x": 100, "y": 100 }, { "x": 200, "y": 80 },
+          { "x": 300, "y": 85 }, { "x": 400, "y": 70 }, { "x": 500, "y": 85 },
+          { "x": 600, "y": 65 }, { "x": 700, "y": 75 }, { "x": 800, "y": 60 }
+        ]
+      }

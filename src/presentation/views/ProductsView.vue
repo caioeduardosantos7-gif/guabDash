@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useProductStore } from '../../domain/useProductStore'
 import type { Product } from '../../domain/models'
@@ -9,7 +9,9 @@ import ProductFormModal from '../components/ProductFormModal.vue'
 import BackButton from '../components/BackButton.vue'
 
 const { t } = useI18n()
-const { products, categories, addProduct, updateProduct } = useProductStore()
+const { products, categories, loadProducts, addProduct, updateProduct } = useProductStore()
+
+onMounted(() => loadProducts())
 
 const selectedProduct = ref<Product | null>(null)
 const showForm = ref(false)

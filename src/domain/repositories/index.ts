@@ -1,0 +1,5 @@
+export type { ProductRepository } from './ProductRepository'
+export type { CustomerRepository } from './CustomerRepository'
+export type { TransactionRepository } from './TransactionRepository'
+export type { DashboardRepository } from './DashboardRepository'
+export type { SaleRepository } from './SaleRepository'
