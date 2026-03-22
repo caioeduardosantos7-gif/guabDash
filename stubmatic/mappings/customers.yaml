@@ -25,3 +25,10 @@
       content-type: application/json
     body: >
       { "id": 99, "name": "Novo Cliente", "personType": "fisica", "document": "000.000.000-00", "phone": "(00) 00000-0000", "email": "novo@email.com" }
+
+-
+  request:
+    url: /api/customers/{id}
+    method: DELETE
+  response:
+    status: 204

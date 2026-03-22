@@ -12,6 +12,8 @@ const customers = reactive<Customer[]>([])
 const showModal = ref(false)
 const editingCustomer = ref<Customer | null>(null)
 const search = ref('')
+const customerToDelete = ref<Customer | null>(null)
+const deleting = ref(false)
 
 onMounted(async () => {
   const list = await customerService.list()
@@ -45,8 +47,25 @@ async function saveCustomer(data: Omit<Customer, 'id'>) {
   closeModal()
 }
 
+function confirmDelete(customer: Customer) {
+  customerToDelete.value = customer
+}
+
+async function deleteCustomer() {
+  if (!customerToDelete.value) return
+  deleting.value = true
+  try {
+    await customerService.remove(customerToDelete.value.id)
+    const idx = customers.findIndex(c => c.id === customerToDelete.value!.id)
+    if (idx !== -1) customers.splice(idx, 1)
+    customerToDelete.value = null
+  } finally {
+    deleting.value = false
+  }
+}
+
 function filteredCustomers() {
-  if (!search.value.trim()) return customers
+  if (search.value.trim().length < 2) return customers
   const q = search.value.toLowerCase()
   return customers.filter(c =>
     c.name.toLowerCase().includes(q) ||
@@ -123,17 +142,31 @@ function filteredCustomers() {
           </div>
         </div>
 
-        <!-- Edit button -->
-        <button
-          class="shrink-0 w-9 h-9 bg-gray-100 dark:bg-[#272727] hover:bg-amber-500 hover:text-white text-gray-400 dark:text-gray-500 dark:hover:text-white border-none rounded-[10px] flex items-center justify-center transition-colors cursor-pointer"
-          @click="openEdit(c)"
-          :title="t('customers.editCustomer')"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-        </button>
+        <!-- Actions -->
+        <div class="flex items-center gap-1.5">
+          <button
+            class="shrink-0 w-9 h-9 bg-gray-100 dark:bg-[#272727] hover:bg-amber-500 hover:text-white text-gray-400 dark:text-gray-500 dark:hover:text-white border-none rounded-[10px] flex items-center justify-center transition-colors cursor-pointer"
+            @click="openEdit(c)"
+            :title="t('customers.editCustomer')"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button
+            class="shrink-0 w-9 h-9 bg-gray-100 dark:bg-[#272727] hover:bg-red-500 hover:text-white text-gray-400 dark:text-gray-500 dark:hover:text-white border-none rounded-[10px] flex items-center justify-center transition-colors cursor-pointer"
+            @click="confirmDelete(c)"
+            :title="t('customers.deleteCustomer')"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6"/><path d="M14 11v6"/>
+              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Empty State -->
@@ -155,5 +188,45 @@ function filteredCustomers() {
       @close="closeModal"
       @save="saveCustomer"
     />
+
+    <!-- Delete Confirmation -->
+    <Teleport to="body">
+      <div
+        v-if="customerToDelete"
+        class="fixed inset-0 bg-black/45 flex items-center justify-center z-[200] backdrop-blur-[3px]"
+        @click.self="customerToDelete = null"
+      >
+        <div class="bg-white dark:bg-[#1e1e1e] w-full max-w-[400px] mx-4 rounded-2xl p-6 shadow-xl">
+          <!-- Icon -->
+          <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6"/><path d="M14 11v6"/>
+              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+          </div>
+          <h3 class="text-[17px] font-bold text-gray-900 dark:text-gray-100 text-center mb-2">{{ t('customers.deleteConfirmTitle') }}</h3>
+          <p class="text-[13px] text-gray-500 dark:text-gray-400 text-center mb-6">
+            {{ t('customers.deleteConfirmMessage') }} <span class="font-semibold text-gray-800 dark:text-gray-200">{{ customerToDelete.name }}</span>?
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              class="py-2.5 border border-gray-200 dark:border-[#3a3a3a] rounded-xl bg-white dark:bg-[#272727] text-[14px] font-semibold text-gray-500 dark:text-gray-400 cursor-pointer hover:border-gray-400 transition-colors"
+              @click="customerToDelete = null"
+            >
+              {{ t('customers.deleteCancel') }}
+            </button>
+            <button
+              class="py-2.5 border-none rounded-xl bg-red-500 hover:bg-red-600 text-[14px] font-semibold text-white cursor-pointer transition-colors disabled:opacity-60"
+              :disabled="deleting"
+              @click="deleteCustomer"
+            >
+              {{ t('customers.deleteConfirmButton') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>

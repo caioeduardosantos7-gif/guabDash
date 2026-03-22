@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../../domain/useAuthStore'
 
 const { t } = useI18n()
+const router = useRouter()
+const { user, isAdmin, logout } = useAuthStore()
 
 defineProps<{
   darkMode: boolean
@@ -14,6 +18,15 @@ const emit = defineEmits<{
 
 const menuOpen = ref(false)
 const wrapRef = ref<HTMLElement | null>(null)
+
+const initials = computed(() => {
+  if (!user.value) return 'GV'
+  const parts = user.value.name.split(' ')
+  return (parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')
+})
+
+const displayName = computed(() => user.value?.name ?? 'GuanVendas')
+const displayEmail = computed(() => user.value?.email ?? '')
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
@@ -33,6 +46,17 @@ function onToggleDark() {
   emit('toggle-dark')
 }
 
+function goToProfile() {
+  closeMenu()
+  router.push({ name: 'perfil' })
+}
+
+function handleLogout() {
+  closeMenu()
+  logout()
+  router.replace({ name: 'login' })
+}
+
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onUnmounted(() => document.removeEventListener('click', handleClickOutside))
 </script>
@@ -45,7 +69,7 @@ onUnmounted(() => document.removeEventListener('click', handleClickOutside))
       :class="menuOpen ? 'ring-[3px] ring-indigo-100 dark:ring-indigo-950/40' : 'hover:ring-[3px] hover:ring-indigo-100 dark:hover:ring-indigo-950/40'"
       @click.stop="toggleMenu"
     >
-      GV
+      {{ initials }}
     </div>
 
     <!-- Menu Dropdown -->
@@ -64,18 +88,22 @@ onUnmounted(() => document.removeEventListener('click', handleClickOutside))
         <!-- Header -->
         <div class="flex items-center gap-2.5 px-4 pt-3.5 pb-3 border-b border-gray-200 dark:border-[#3a3a3a]">
           <div class="w-[38px] h-[38px] rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 grid place-items-center text-white text-[13px] font-bold shrink-0">
-            GV
+            {{ initials }}
           </div>
-          <div>
-            <div class="text-[13px] font-bold text-gray-900 dark:text-gray-100 leading-tight">GuanVendas</div>
-            <div class="text-[11px] text-gray-500 dark:text-gray-400">admin@guanvendas.com</div>
+          <div class="min-w-0">
+            <div class="text-[13px] font-bold text-gray-900 dark:text-gray-100 leading-tight truncate">{{ displayName }}</div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">{{ displayEmail }}</div>
           </div>
         </div>
 
         <!-- Body -->
         <div class="p-1.5">
-          <!-- Perfil -->
-          <div class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#272727] transition-colors duration-100 group">
+          <!-- Perfil (admin only) -->
+          <div
+            v-if="isAdmin"
+            class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer text-[13px] font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-[#272727] transition-colors duration-100 group"
+            @click="goToProfile"
+          >
             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 shrink-0 group-hover:text-indigo-500 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
             </svg>
@@ -119,7 +147,7 @@ onUnmounted(() => document.removeEventListener('click', handleClickOutside))
           <!-- Sair -->
           <div
             class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer text-[13px] font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors duration-100"
-            @click="closeMenu"
+            @click="handleLogout"
           >
             <svg class="w-4 h-4 text-red-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>

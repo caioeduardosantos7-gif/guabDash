@@ -13,10 +13,23 @@ const emit = defineEmits<{
   'toggle-dark': []
 }>()
 
+const MONTH_KEYS = [
+  'months.jan', 'months.feb', 'months.mar', 'months.apr',
+  'months.may', 'months.jun', 'months.jul', 'months.aug',
+  'months.sep', 'months.oct', 'months.nov', 'months.dec',
+]
+
+function getGreetingKey(hour: number): string {
+  if (hour < 12) return 'topbar.greetingMorning'
+  if (hour < 18) return 'topbar.greetingAfternoon'
+  return 'topbar.greetingEvening'
+}
+
+const greeting = computed(() => t(getGreetingKey(new Date().getHours())))
+
 const today = computed(() => {
   const d = new Date()
-  const monthKeys = ['months.jan', 'months.feb', 'months.mar', 'months.apr', 'months.may', 'months.jun', 'months.jul', 'months.aug', 'months.sep', 'months.oct', 'months.nov', 'months.dec']
-  return `${d.getDate()} ${t(monthKeys[d.getMonth()])} ${d.getFullYear()}`
+  return `${d.getDate()} ${t(MONTH_KEYS[d.getMonth()])} ${d.getFullYear()}`
 })
 </script>
 
@@ -24,7 +37,7 @@ const today = computed(() => {
   <header class="bg-white dark:bg-[#1e1e1e] border-b border-gray-200 dark:border-[#3a3a3a] px-4 md:px-7 py-3 md:py-[18px] flex items-center justify-between sticky top-0 z-[15] transition-colors duration-200">
     <div class="min-w-0">
       <h1 class="text-[18px] md:text-[22px] font-bold tracking-tight text-gray-900 dark:text-gray-100 m-0 truncate">
-        {{ t('topbar.greeting') }}
+        {{ greeting }}
       </h1>
       <p class="text-[12px] md:text-[13px] text-gray-500 dark:text-gray-400 mt-0.5 hidden sm:block">
         {{ t('topbar.subtitle') }}

@@ -9,7 +9,8 @@
       "mappings/customers.yaml",
       "mappings/transactions.yaml",
       "mappings/dashboard.yaml",
-      "mappings/sales.yaml"
+      "mappings/sales.yaml",
+      "mappings/auth.yaml"
     ]
   }
 }

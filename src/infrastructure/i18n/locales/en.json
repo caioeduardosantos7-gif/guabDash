@@ -1,4 +1,40 @@
 {
+  "login": {
+    "title": "Agent Login",
+    "subtitle": "Hello, enter your credentials to access your account",
+    "userPlaceholder": "Username",
+    "passwordPlaceholder": "Password",
+    "show": "Show",
+    "hide": "Hide",
+    "troubleLink": "Trouble signing in?",
+    "signIn": "Sign In",
+    "loading": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "requestAccess": "Request access",
+    "fillAll": "Please fill in all fields.",
+    "invalidCredentials": "Invalid username or password."
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal Information",
+    "name": "Name",
+    "email": "Email",
+    "save": "Save Changes",
+    "saved": "Saved successfully!",
+    "companyInfo": "Company Information",
+    "companyName": "Company Name",
+    "companyDocument": "Tax ID",
+    "companyPhone": "Phone",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "updatePassword": "Change Password",
+    "passwordChanged": "Password changed successfully!",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordTooShort": "New password must be at least 6 characters.",
+    "passwordError": "Failed to change password. Check your current password."
+  },
   "sidebar": {
     "brand": "GuanVendas",
     "mainMenu": "Main Menu",
@@ -16,7 +52,9 @@
     "discounts": "Discounts"
   },
   "topbar": {
-    "greeting": "Good morning! 👋",
+    "greetingMorning": "Good morning! 👋",
+    "greetingAfternoon": "Good afternoon! 👋",
+    "greetingEvening": "Good evening! 👋",
     "subtitle": "See what's happening with your store today"
   },
   "userMenu": {
@@ -87,7 +125,12 @@
     "editCustomer": "Edit customer",
     "close": "Close",
     "searchPlaceholder": "Search customer, CPF, email...",
-    "noCustomers": "No customers registered."
+    "noCustomers": "No customers registered.",
+    "deleteCustomer": "Delete customer",
+    "deleteConfirmTitle": "Delete customer",
+    "deleteConfirmMessage": "Are you sure you want to delete",
+    "deleteConfirmButton": "Delete",
+    "deleteCancel": "Cancel"
   },
   "salesPanel": {
     "registerSale": "Register Sale",

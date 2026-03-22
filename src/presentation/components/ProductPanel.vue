@@ -213,7 +213,7 @@ const filtered = computed(() => {
     list = list.filter(p => p.category === activeCategory.value)
   }
 
-  if (search.value.trim()) {
+  if (search.value.trim().length >= 2) {
     const q = search.value.toLowerCase()
     list = list.filter(p =>
       p.name.toLowerCase().includes(q) ||

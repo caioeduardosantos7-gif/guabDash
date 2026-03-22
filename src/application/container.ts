@@ -4,11 +4,13 @@ import { CustomerRepositoryHttp } from '../infrastructure/repositories/CustomerR
 import { TransactionRepositoryHttp } from '../infrastructure/repositories/TransactionRepositoryHttp'
 import { DashboardRepositoryHttp } from '../infrastructure/repositories/DashboardRepositoryHttp'
 import { SaleRepositoryHttp } from '../infrastructure/repositories/SaleRepositoryHttp'
+import { AuthRepositoryHttp } from '../infrastructure/repositories/AuthRepositoryHttp'
 import { ProductService } from './usecases/ProductService'
 import { CustomerService } from './usecases/CustomerService'
 import { TransactionService } from './usecases/TransactionService'
 import { DashboardService } from './usecases/DashboardService'
 import { SaleService } from './usecases/SaleService'
+import { AuthService } from './usecases/AuthService'
 
 const httpClient = new HttpClient('')
 
@@ -17,9 +19,11 @@ const customerRepo = new CustomerRepositoryHttp(httpClient)
 const transactionRepo = new TransactionRepositoryHttp(httpClient)
 const dashboardRepo = new DashboardRepositoryHttp(httpClient)
 const saleRepo = new SaleRepositoryHttp(httpClient)
+const authRepo = new AuthRepositoryHttp(httpClient)
 
 export const productService = new ProductService(productRepo)
 export const customerService = new CustomerService(customerRepo)
 export const transactionService = new TransactionService(transactionRepo)
 export const dashboardService = new DashboardService(dashboardRepo)
 export const saleService = new SaleService(saleRepo)
+export const authService = new AuthService(authRepo)

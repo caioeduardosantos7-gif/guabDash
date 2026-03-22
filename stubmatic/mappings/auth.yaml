@@ -1,0 +1,91 @@
+-
+  request:
+    url: /api/auth/login
+    method: POST
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxMTAwMDAwMCwiZXhwIjoxNzExMDAzNjAwfQ.mock",
+        "refreshToken": "rt_mock_refresh_token_abc123",
+        "user": {
+          "id": 1,
+          "name": "Admin GuanVendas",
+          "email": "admin@guanvendas.com",
+          "role": "admin",
+          "company": {
+            "name": "GuanVendas LTDA",
+            "document": "12.345.678/0001-90",
+            "phone": "(11) 3333-4444"
+          }
+        }
+      }
+
+-
+  request:
+    url: /api/auth/refresh
+    method: POST
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxMTAwMDAwMCwiZXhwIjoxNzExMDAzNjAwfQ.refreshed",
+        "refreshToken": "rt_mock_refresh_token_def456"
+      }
+
+-
+  request:
+    url: /api/auth/profile
+    method: GET
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      {
+        "id": 1,
+        "name": "Admin GuanVendas",
+        "email": "admin@guanvendas.com",
+        "role": "admin",
+        "company": {
+          "name": "GuanVendas LTDA",
+          "document": "12.345.678/0001-90",
+          "phone": "(11) 3333-4444"
+        }
+      }
+
+-
+  request:
+    url: /api/auth/profile
+    method: PUT
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      {
+        "id": 1,
+        "name": "Admin GuanVendas",
+        "email": "admin@guanvendas.com",
+        "role": "admin",
+        "company": {
+          "name": "GuanVendas LTDA",
+          "document": "12.345.678/0001-90",
+          "phone": "(11) 3333-4444"
+        }
+      }
+
+-
+  request:
+    url: /api/auth/change-password
+    method: POST
+  response:
+    status: 200
+    headers:
+      content-type: application/json
+    body: >
+      { "message": "Password changed successfully" }

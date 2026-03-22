@@ -1,4 +1,40 @@
 {
+  "login": {
+    "title": "Login",
+    "subtitle": "Olá, insira seus dados para acessar a sua conta",
+    "userPlaceholder": "Usuário",
+    "passwordPlaceholder": "Senha",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "troubleLink": "Problemas para entrar?",
+    "signIn": "Entrar",
+    "loading": "Entrando...",
+    "noAccount": "Não tem uma conta?",
+    "requestAccess": "Solicite agora",
+    "fillAll": "Preencha todos os campos.",
+    "invalidCredentials": "Usuário ou senha inválidos."
+  },
+  "profile": {
+    "title": "Meu Perfil",
+    "personalInfo": "Dados Pessoais",
+    "name": "Nome",
+    "email": "E-mail",
+    "save": "Salvar Alterações",
+    "saved": "Salvo com sucesso!",
+    "companyInfo": "Dados da Empresa",
+    "companyName": "Nome da Empresa",
+    "companyDocument": "CNPJ",
+    "companyPhone": "Telefone",
+    "changePassword": "Alterar Senha",
+    "currentPassword": "Senha Atual",
+    "newPassword": "Nova Senha",
+    "confirmPassword": "Confirmar Senha",
+    "updatePassword": "Alterar Senha",
+    "passwordChanged": "Senha alterada com sucesso!",
+    "passwordMismatch": "As senhas não coincidem.",
+    "passwordTooShort": "A nova senha deve ter pelo menos 6 caracteres.",
+    "passwordError": "Erro ao alterar senha. Verifique a senha atual."
+  },
   "sidebar": {
     "brand": "GuanVendas",
     "mainMenu": "Menu Principal",
@@ -16,7 +52,9 @@
     "discounts": "Descontos"
   },
   "topbar": {
-    "greeting": "Bom dia! 👋",
+    "greetingMorning": "Bom dia! 👋",
+    "greetingAfternoon": "Boa tarde! 👋",
+    "greetingEvening": "Boa noite! 👋",
     "subtitle": "Veja o que está acontecendo com sua loja hoje"
   },
   "userMenu": {
@@ -87,7 +125,12 @@
     "editCustomer": "Editar cliente",
     "close": "Fechar",
     "searchPlaceholder": "Buscar cliente, CPF, email...",
-    "noCustomers": "Nenhum cliente cadastrado."
+    "noCustomers": "Nenhum cliente cadastrado.",
+    "deleteCustomer": "Excluir cliente",
+    "deleteConfirmTitle": "Excluir cliente",
+    "deleteConfirmMessage": "Tem certeza que deseja excluir o cliente",
+    "deleteConfirmButton": "Excluir",
+    "deleteCancel": "Cancelar"
   },
   "salesPanel": {
     "registerSale": "Registrar Venda",
